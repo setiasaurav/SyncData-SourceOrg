@@ -1,0 +1,46 @@
+<template>
+    <lightning-card title="Organization Documents" class="custom-card">
+        <div class="slds-col slds-size_3-of-3 slds-text-align_right">
+            <div class="slds-m-around_medium">
+                <lightning-button label="Download All Document" variant="brand"
+                    onclick={downloadCompanyHandler}></lightning-button>
+            </div>
+        </div>
+        <template for:each={policies} for:item="policy">
+            <div key={policy.name} class="file-card slds-m-around_medium">
+                <div class="slds-grid slds-gutters file-data-container">
+                    <div class="slds-col file-name-container slds-size_3-of-3 file-name-div slds-small-size_3-of-3 slds-medium-size_2-of-3 slds-large-size_2-of-3 slds-m-bottom_x-small">
+                        <div class="file-info">
+                            <p class="file-name slds-text-heading_small">{policy.name}</p>
+                        </div>
+                    </div>
+                    <div class="slds-col slds-size_3-of-3 slds-small-size_3-of-3 slds-medium-size_1-of-3 slds-large-size_1-of-3 slds-text-align_right btn-div slds-m-bottom_x-small">
+                        <button data-acknowledge={policy.acknowledge} data-acknowledgeid={policy.acknowledgeId} style={policy.dynamicColor} class="slds-m-right_small ack-btn" onclick={handleAcknowledge}>
+                            <span lwc:if={policy.acknowledge}>Acknowledged</span>
+                            <span lwc:else>Acknowledge</span>
+                        </button>
+                        <lightning-button label="Preview" variant="brand" data-index={policy.previewUrl} onclick={previewFile}></lightning-button>
+                        <a href={policy.downloadUrl} target="_blank" download class="slds-button slds-button_neutral slds-m-left_x-small">
+                            Download
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </template>
+        <template if:true={showPreview}>
+            <div class="fullscreen-modal">
+                <div class="modal">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h2>File Preview</h2>
+                            <span class="close" onclick={closePreview}>&times;</span>
+                        </div>
+                        <div class="modal-body">
+                            <iframe src={selectedPreviewFileUrl} width="100%" height="100%" type="application/pdf"></iframe>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </template>
+    </lightning-card>
+</template>
